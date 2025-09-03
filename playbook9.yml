@@ -1,0 +1,13 @@
+---
+- name: implement host scopde variable
+  hosts: webserver
+  tasks:
+    - name: install firewall
+      apt:
+        name: "{{a}}"
+        state: "{{b}}"
+        update_cache: "{{c}}"
+
+
+...
+

@@ -1,0 +1,14 @@
+- name: Install tomcat
+  hosts: all
+  become: yes
+  vars:
+    a: tomcat10
+    b: present
+
+  tasks:
+    - name: Install software
+      apt:
+        name: "{{ a }}"
+        state: "{{ b }}"
+        update_cache: yes
+...

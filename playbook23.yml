@@ -1,0 +1,43 @@
+---
+- name: Configure apache2/httpd on all servers
+  hosts: all
+  tasks:
+    - block:
+        - name: Install apache2 using apt
+          apt:
+            name: apache2
+            state: present
+            update_cache: yes
+      rescue:
+        - name: Install httpd using yum
+          yum:
+            name: httpd
+            state: present
+            update_cache: yes
+    - name: Edit the index.html file
+      copy:
+        content: "IntelliQIT"
+        dest: /var/www/html/index.html
+    - block:
+        - name: Restart apache2
+          service:
+            name: apache2
+            state: restarted
+      rescue:
+        - name: Restart httpd
+          service:
+            name: httpd
+            state: restarted
+    - name: Check apache2/httpd response on all servers
+      uri:
+        url: "{{item}}"
+        status_code: 200
+      with_items:
+        - http://172.31.47.148
+        - http://172.31.42.194
+        - http://172.31.22.46
+
+
+
+
+...

@@ -1,0 +1,35 @@
+---
+- name: Implimenting Handlers
+  hosts: all
+  tasks:
+    - name: Install apache2
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+      notify: Restart apache2
+    - name: Edit the index.html of the file
+      copy:
+        content: "Welcome to admin"
+        dest: /var/www/html/index.html
+      notify: Restart apache2
+  handlers:
+    - name: Restart apache2
+      service:
+        name: apache2
+        state: restarted
+        enabled: true
+    - name: Check url response
+      uri:
+        url: "{{}}"
+        ststus_code: 200
+      with_items:
+        - http://172.31.42.194
+        - http://172.31.47.148
+
+
+
+
+
+
+...
